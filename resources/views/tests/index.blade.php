@@ -1,27 +1,47 @@
 @extends('layouts.app')
 
+@section('title', 'Тесты')
+
 @section('content')
-<div class="max-w-3xl mx-auto mt-12">
-    <h1 class="text-3xl font-bold mb-6 text-center">Выбор теста</h1>
+<div class="mb-8">
+    <h1 class="text-3xl font-black">Тренировки</h1>
+    <p class="mt-2 text-slate-600">Короткие тесты дают XP, пополняют статистику и открывают достижения.</p>
+</div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        <a href="{{ route('tests.compile-word') }}" class="p-6 bg-white shadow rounded-lg hover:shadow-xl transition">
-            <h2 class="text-xl font-semibold mb-2">Тест на сборку слова</h2>
-            <p class="text-gray-600">Соберите слово на английском из букв под русским переводом.</p>
-        </a>
+@php
+    $includePhrases = $includePhrases ?? false;
+    $testQuery = ['include_phrases' => $includePhrases ? 1 : 0];
+    $tests = [
+        ['route' => 'tests.multiple-choice', 'title' => 'Быстрый выбор перевода', 'text' => 'Классика как в популярных языковых тренажерах: слово и 4 варианта перевода.'],
+        ['route' => 'tests.gap-fill', 'title' => 'Пропущенное слово', 'text' => 'Впишите слово в контекст предложения. Хорошо тренирует лексику и грамматику.'],
+        ['route' => 'tests.sentence-builder', 'title' => 'Собери предложение', 'text' => 'Порядок слов в английском без скучной теории.'],
+        ['route' => 'tests.phonetics', 'title' => 'Фонетика', 'text' => 'Выберите слово по транскрипции и привыкните к чтению звуков.'],
+        ['route' => 'tests.word-sprint', 'title' => 'Словарный спринт', 'text' => 'Быстро определяйте верные и неверные пары слово-перевод.'],
+        ['route' => 'tests.compile-word', 'title' => 'Сборка слова', 'text' => 'Старый режим проекта: собрать английское слово из букв.'],
+        ['route' => 'tests.translation', 'title' => 'Ввод перевода', 'text' => 'Старый режим проекта: написать перевод вручную.'],
+        ['route' => 'tests.flashcards', 'title' => 'Флеш-карточки', 'text' => 'Учебный режим для спокойного повторения слов.'],
+    ];
+@endphp
 
-        <a href="{{ route('tests.translation') }}" class="p-6 bg-white shadow rounded-lg hover:shadow-xl transition">
-            <h2 class="text-xl font-semibold mb-2">Тест на перевод</h2>
-            <p class="text-gray-600">Проверьте себя: сможете ли вы перевести эти слова правильно?</p>
-        </a>
+<section class="mb-6 rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+        <div>
+            <h2 class="font-black">Фразы в тренировках</h2>
+            <p class="mt-1 text-sm text-slate-600">Можно убрать phrase из словарных тестов. С фразами за правильные ответы начисляется немного больше XP.</p>
+        </div>
+        <div class="flex rounded border border-slate-200 bg-slate-50 p-1">
+            <a href="{{ route('tests.index', ['include_phrases' => 1]) }}" class="rounded px-4 py-2 text-sm font-bold {{ $includePhrases ? 'bg-emerald-600 text-white' : 'text-slate-700' }}">Включены</a>
+            <a href="{{ route('tests.index', ['include_phrases' => 0]) }}" class="rounded px-4 py-2 text-sm font-bold {{ ! $includePhrases ? 'bg-emerald-600 text-white' : 'text-slate-700' }}">Без фраз</a>
+        </div>
     </div>
+</section>
 
-    {{-- Новая кнопка на 2 колонки --}}
-    <div class="grid grid-cols-1 md:grid-cols-2">
-        <a href="{{ route('tests.flashcards') }}" class="md:col-span-2 p-6 bg-white shadow rounded-lg hover:shadow-xl transition block">
-            <h2 class="text-xl font-semibold mb-2">Карточки слов (учебный режим)</h2>
-            <p class="text-gray-600">Учите слова по карточкам с изображениями — просто листайте и запоминайте!</p>
+<div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    @foreach($tests as $test)
+        <a href="{{ route($test['route'], in_array($test['route'], ['tests.gap-fill', 'tests.sentence-builder'], true) ? [] : $testQuery) }}" class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-emerald-300 hover:shadow-md">
+            <h2 class="text-lg font-black">{{ $test['title'] }}</h2>
+            <p class="mt-2 text-sm leading-6 text-slate-600">{{ $test['text'] }}</p>
         </a>
-    </div>
+    @endforeach
 </div>
 @endsection

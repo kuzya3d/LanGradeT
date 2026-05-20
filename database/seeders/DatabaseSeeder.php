@@ -10,12 +10,16 @@ class DatabaseSeeder extends Seeder
     /**
      * Seed the application's database.
      */
-public function run()
-{
-    $this->call([
-        CollectionsTableSeeder::class,
-        WordsTableSeeder::class,
-        CollectionWordSeeder::class,
-    ]);
-}
+    public function run(): void
+    {
+        $this->call([
+            LearningContentSeeder::class,
+            ExpandedLearningSeeder::class,
+            RichLessonsSeeder::class,
+            SourceInspiredContentSeeder::class,
+            GrammarConceptsSeeder::class,
+            VocabularySeeder::class,
+            SentenceCorpusSeeder::class,
+        ]);
+    }
 }

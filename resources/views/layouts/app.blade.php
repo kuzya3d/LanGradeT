@@ -1,70 +1,109 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LanGrade</title>
+    <title>@yield('title', 'LanGrade')</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="//unpkg.com/alpinejs" defer></script>
-    <link rel="icon" href="{{ asset('TEST8.png') }}" type="image/png">
+    <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
+    <style>
+        body { background: #f5f7fb; }
+        .glass { background: rgba(255,255,255,.88); backdrop-filter: blur(16px); }
+        button,
+        a[class*="bg-"][class*="px-"],
+        a[class*="border"][class*="px-"],
+        a[class*="inline-block"][class*="rounded"] {
+            transition-property: transform, box-shadow, border-color, background-color, color, opacity;
+            transition-duration: 180ms;
+            transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+        }
+        button:not(:disabled):hover,
+        a[class*="bg-"][class*="px-"]:hover,
+        a[class*="border"][class*="px-"]:hover,
+        a[class*="inline-block"][class*="rounded"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 18px -14px rgba(15, 23, 42, .45);
+        }
+        button:not(:disabled):active,
+        a[class*="bg-"][class*="px-"]:active,
+        a[class*="border"][class*="px-"]:active,
+        a[class*="inline-block"][class*="rounded"]:active {
+            transform: translateY(0);
+            box-shadow: 0 3px 10px -10px rgba(15, 23, 42, .45);
+        }
+        button:focus-visible,
+        a[class*="bg-"][class*="px-"]:focus-visible,
+        a[class*="border"][class*="px-"]:focus-visible,
+        a[class*="inline-block"][class*="rounded"]:focus-visible {
+            outline: 3px solid rgba(16, 185, 129, .28);
+            outline-offset: 2px;
+        }
+        button:disabled {
+            transform: none;
+            box-shadow: none;
+            opacity: .72;
+        }
+    </style>
 </head>
-<body class="min-h-screen flex flex-col bg-gray-50">
-
-    <!-- Хедер -->
-    <header x-data="{ open: false }" class="bg-white shadow-md">
-        <div class="container mx-auto flex flex-wrap items-center justify-between px-4 py-4">
-
-            <!-- Лого -->
-            <a href="{{ url('/') }}" class="text-2xl font-bold text-purple-600">
-                LanGrade
+<body class="min-h-screen text-slate-900">
+    <header x-data="{ open: false }" class="sticky top-0 z-40 border-b border-slate-200 glass">
+        <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
+            <a href="{{ route('home') }}" class="flex items-center gap-3 font-black tracking-tight">
+                <span class="grid h-10 w-10 place-items-center rounded bg-emerald-600 text-white">LG</span>
+                <span class="text-xl">LanGrade</span>
             </a>
 
-            <!-- Бургер -->
-            <button @click="open = !open" class="md:hidden text-purple-600 focus:outline-none">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
-                     viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
+            <button @click="open = !open" class="rounded border border-slate-200 p-2 md:hidden" aria-label="Меню">
+                <span class="block h-0.5 w-6 bg-slate-800"></span>
+                <span class="mt-1.5 block h-0.5 w-6 bg-slate-800"></span>
+                <span class="mt-1.5 block h-0.5 w-6 bg-slate-800"></span>
             </button>
 
-            <!-- Навигация -->
-            <nav :class="{ 'block': open, 'hidden': !open }"
-                 class="w-full md:flex md:items-center md:w-auto mt-4 md:mt-0 space-y-2 md:space-y-0 md:space-x-6 hidden text-gray-700 font-medium">
-                <a href="{{ url('/dictionary') }}" class="block hover:text-purple-600">Личный словарь</a>
-                <a href="{{ url('/tests') }}" class="block hover:text-purple-600">Тесты</a>
-                <a href="{{ url('/collections') }}" class="block hover:text-purple-600">Подборки слов</a>
+            <nav :class="open ? 'block' : 'hidden'" class="absolute left-0 top-16 max-h-[calc(100vh-4rem)] w-full overflow-y-auto border-b border-slate-200 bg-white px-4 py-4 md:static md:block md:max-h-none md:w-auto md:overflow-visible md:border-0 md:bg-transparent md:p-0">
+                <div class="flex flex-col gap-3 text-sm font-semibold md:flex-row md:items-center md:gap-5">
+                    <a class="hover:text-emerald-700" href="{{ route('lessons.index') }}">Уроки</a>
+                    <a class="hover:text-emerald-700" href="{{ route('tests.index') }}">Тесты</a>
+                    <a class="hover:text-emerald-700" href="{{ route('collections.index') }}">Слова</a>
+                    <a class="hover:text-emerald-700" href="{{ route('leaderboard.index') }}">Рейтинг</a>
+                    @auth
+                        <a class="hover:text-emerald-700" href="{{ route('dictionary.index') }}">Словарь</a>
+                        <a class="hover:text-emerald-700" href="{{ route('community.index') }}">Чат</a>
+                        <a class="hover:text-emerald-700" href="{{ route('ai.index') }}">AI-Наставник</a>
+                        <a href="{{ route('profile') }}" class="rounded border border-slate-200 px-3 py-2 text-sm font-semibold md:hidden">{{ Auth::user()->name }} · {{ Auth::user()->xp }} XP</a>
+                        <form method="POST" action="{{ route('logout') }}" class="md:hidden">
+                            @csrf
+                            <button class="w-full rounded bg-slate-900 px-3 py-2 text-left text-sm font-semibold text-white">Выйти</button>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}" class="rounded bg-emerald-600 px-4 py-2 text-sm font-bold text-white md:hidden">Войти</a>
+                    @endauth
+                </div>
             </nav>
 
-            <!-- Профиль -->
-            <div class="w-full md:w-auto mt-4 md:mt-0 flex justify-end items-center space-x-4">
+            <div class="hidden items-center gap-3 md:flex">
                 @auth
-                    <a href="{{ url('/profile') }}" class="text-gray-700 hover:text-purple-600 font-medium">
-                        {{ Auth::user()->name }}
-                    </a>
+                    <a href="{{ route('profile') }}" class="rounded border border-slate-200 px-3 py-2 text-sm font-semibold">{{ Auth::user()->name }} · {{ Auth::user()->xp }} XP</a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="text-red-500 hover:underline">Выйти</button>
+                        <button class="rounded bg-slate-900 px-3 py-2 text-sm font-semibold text-white">Выйти</button>
                     </form>
                 @else
-                    <a href="{{ route('login') }}" class="text-purple-600 hover:underline font-medium">
-                        Войти / Регистрация
-                    </a>
+                    <a href="{{ route('login') }}" class="rounded bg-emerald-600 px-4 py-2 text-sm font-bold text-white">Войти</a>
                 @endauth
             </div>
         </div>
     </header>
 
-    <!-- Основной контент -->
-    <main class="flex-grow container mx-auto px-4 sm:px-6 py-6">
+    <main class="mx-auto max-w-7xl px-4 py-8">
+        @if(session('success'))
+            <div class="mb-6 rounded border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-800">{{ session('success') }}</div>
+        @endif
         @yield('content')
     </main>
 
-    <!-- Футер -->
-    <footer class="bg-white border-t mt-10 py-6 text-center text-gray-600 text-sm px-4">
-        <p>Контакты: LanGradeContact@gmail.com</p>
-        <p>Телефон: +7 908 244 88 41</p>
+    <footer class="border-t border-slate-200 bg-white py-6 text-center text-sm text-slate-500">
+        LanGrade · базовый английский от фонетики до первых диалогов
     </footer>
-
 </body>
 </html>

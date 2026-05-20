@@ -9,16 +9,20 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-public function up()
-{
-    Schema::create('words', function (Blueprint $table) {
-        $table->id();
-        $table->string('english');
-        $table->string('russian');
-        $table->string('image')->nullable();
-        $table->timestamps();
-    });
-}
+    public function up()
+    {
+        Schema::create('words', function (Blueprint $table) {
+            $table->id();
+            $table->string('english')->unique();
+            $table->string('russian');
+            $table->string('transcription')->nullable();
+            $table->string('part_of_speech')->nullable();
+            $table->string('difficulty', 10)->default('A1');
+            $table->text('example_en')->nullable();
+            $table->text('example_ru')->nullable();
+            $table->timestamps();
+        });
+    }
 
 
     /**

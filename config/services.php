@@ -31,4 +31,16 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'gigachat' => [
+        'authorization_key' => env('GIGACHAT_AUTHORIZATION_KEY'),
+        'oauth_url' => env('GIGACHAT_OAUTH_URL', 'https://ngw.devices.sberbank.ru:9443'),
+        'api_url' => env('GIGACHAT_API_URL', 'https://gigachat.devices.sberbank.ru'),
+        'scope' => env('GIGACHAT_SCOPE', 'GIGACHAT_API_PERS'),
+        'model' => env('GIGACHAT_MODEL', 'GigaChat'),
+        'timeout' => env('GIGACHAT_TIMEOUT', 12),
+        'connect_timeout' => env('GIGACHAT_CONNECT_TIMEOUT', 5),
+        'verify_ssl' => filter_var(env('GIGACHAT_VERIFY_SSL', true), FILTER_VALIDATE_BOOLEAN),
+        'proxy' => env('GIGACHAT_PROXY'),
+    ],
+
 ];

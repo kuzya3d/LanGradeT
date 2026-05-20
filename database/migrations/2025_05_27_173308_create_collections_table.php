@@ -15,7 +15,6 @@ public function up()
         $table->id();
         $table->string('title');
         $table->text('description')->nullable();
-        $table->string('image')->nullable();
         $table->timestamps();
     });
 }

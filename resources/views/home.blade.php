@@ -1,50 +1,44 @@
 @extends('layouts.app')
 
-@section('title', 'Главная')
+@section('title', 'LanGrade')
 
 @section('content')
-
-<!-- Блок теста на знание английского -->
-<section class="mb-16 bg-white p-8 rounded shadow-md">
-    <h2 class="text-2xl font-semibold mb-4">Пройдите тест на знание английского языка</h2>
-    <a href="{{ url('/initial-test') }}" class="inline-block bg-purple-600 text-white px-6 py-3 rounded hover:bg-purple-700 transition">
-        Начать тест
-    </a>
+<section class="grid gap-8 lg:grid-cols-[1.1fr_.9fr] lg:items-center">
+    <div>
+        <p class="mb-3 text-sm font-bold uppercase tracking-wide text-emerald-700">English A0-A2</p>
+        <h1 class="max-w-3xl text-4xl font-black leading-tight sm:text-7xl">Учите английский через слова, тесты и живую практику.</h1>
+        <p class="mt-5 max-w-2xl text-lg leading-8 text-slate-600">LanGrade соединяет личный словарь, фонетику, грамматику, интерактивные тренировки, достижения, внутренний чат и AI-наставника для ежедневного обучения.</p>
+        <div class="mt-7 flex flex-wrap gap-3">
+            <a href="{{ route('initial-test.show') }}" class="rounded bg-emerald-600 px-5 py-3 font-bold text-white">Пройти начальный тест</a>
+            <a href="{{ route('tests.index') }}" class="rounded border border-slate-300 px-5 py-3 font-bold">Открыть тренировки</a>
+        </div>
+    </div>
+    <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <div class="grid gap-3 sm:grid-cols-2">
+            <div class="rounded bg-slate-50 p-4"><b>Более 10</b><p class="text-sm text-slate-600">режимов практики</p></div>
+            <div class="rounded bg-slate-50 p-4"><b>Несколько тысяч</b><p class="text-sm text-slate-600">слов и форм для изучения</p></div>
+            <div class="rounded bg-slate-50 p-4"><b>XP</b><p class="text-sm text-slate-600">рейтинг и достижения</p></div>
+            <div class="rounded bg-slate-50 p-4"><b>AI-Наставник</b><p class="text-sm text-slate-600">учебный помощник на базе GigaChat</p></div>
+        </div>
+    </div>
 </section>
 
-<!-- Блок подборок слов -->
-<section class="mb-16">
-    <h2 class="text-2xl font-semibold mb-6">Подборки слов</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<section class="mt-12">
+    <div class="mb-5 flex items-end justify-between gap-4">
+        <div>
+            <h2 class="text-2xl font-black">Подборки слов</h2>
+            <p class="text-slate-600">Каждый набор содержит тематические слова и примеры для тренировок.</p>
+        </div>
+        <a href="{{ route('collections.index') }}" class="text-sm font-bold text-emerald-700">Все подборки</a>
+    </div>
+    <div class="grid gap-4 md:grid-cols-3">
         @foreach($collections as $collection)
-            <a href="{{ url('/collections/'.$collection->id) }}"
-               class="flex items-center bg-white p-4 rounded shadow hover:shadow-lg transition">
-               
-                <!-- Левая часть: текст -->
-                <div class="flex-1 pr-4">
-                    <h3 class="font-semibold text-lg mb-1">{{ $collection->title }}</h3>
-                    <p class="text-gray-600 text-sm">{{ $collection->description }}</p>
-                </div>
-                
-                <!-- Правая часть: картинка -->
-                <div class="w-24 h-24 flex-shrink-0">
-                    <img src="{{ asset('images/collections/' . $collection->image) }}"
-                         alt="{{ $collection->title }}"
-                         class="w-full h-full object-cover rounded">
-                </div>
+            <a href="{{ route('collections.show', $collection) }}" class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+                <h3 class="font-bold">{{ $collection->title }}</h3>
+                <p class="mt-1 text-sm text-slate-600">{{ $collection->description }}</p>
+                <p class="mt-3 text-xs font-bold text-emerald-700">{{ $collection->words_count ?? $collection->words()->count() }} слов</p>
             </a>
         @endforeach
     </div>
 </section>
-
-
-<!-- Кратко о сайте и английском -->
-<section class="bg-white p-8 rounded shadow-md">
-    <h2 class="text-2xl font-semibold mb-4">О LanGrade и изучении английского</h2>
-    <p class="text-gray-700 leading-relaxed">
-        LanGrade — это удобный сайт-тренажер для изучения английского языка. Здесь вы можете тренировать свой словарный запас,
-        проходить тесты и создавать свои подборки слов. Изучение английского становится проще и эффективнее!
-    </p>
-</section>
-
 @endsection

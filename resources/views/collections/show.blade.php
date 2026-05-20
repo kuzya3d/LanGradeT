@@ -1,39 +1,37 @@
 @extends('layouts.app')
 
+@section('title', $collection->title)
+
 @section('content')
-<div class="max-w-5xl mx-auto py-10">
-    <h1 class="text-3xl font-bold mb-4">{{ $collection->title }}</h1>
-    <p class="text-gray-600 mb-8">{{ $collection->description }}</p>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        @foreach ($collection->words as $word)
-            <div class="bg-white rounded-xl shadow p-4 flex flex-col items-center text-center">
-                <div class="w-28 h-28 mb-3 rounded bg-gray-100 flex items-center justify-center overflow-hidden">
-                    <img src="{{ asset('images/' . $word->image) }}"
-                         alt="{{ $word->english }}"
-                         class="object-contain w-full h-full">
-                </div>
-
-                <h3 class="text-lg font-semibold mb-1">{{ $word->english }}</h3>
-                <p class="text-gray-600 mb-3">{{ $word->russian }}</p>
-
-                @auth
-                    @if(in_array($word->id, $userWordIds))
-                        <button disabled class="bg-gray-400 text-white text-sm px-3 py-1.5 rounded cursor-not-allowed">
-                            Уже добавлено
-                        </button>
-                    @else
-                        <form action="{{ route('words.add', $word->id) }}" method="POST" class="w-full">
-                            @csrf
-                            <button type="submit"
-                                    class="w-full bg-purple-500 hover:bg-purple-600 text-white text-sm px-3 py-1.5 rounded transition">
-                                Добавить в словарь
-                            </button>
-                        </form>
-                    @endif
-                @endauth
-            </div>
-        @endforeach
+<div class="mb-8 flex flex-wrap items-end justify-between gap-4">
+    <div>
+        <h1 class="text-3xl font-black">{{ $collection->title }}</h1>
+        <p class="mt-2 text-slate-600">{{ $collection->description }}</p>
     </div>
+    <div class="flex flex-wrap gap-2">
+        @auth
+            <form method="POST" action="{{ route('collections.favorite', $collection) }}">
+                @csrf
+                <button class="rounded border border-slate-300 bg-white px-4 py-3 font-bold shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-300 hover:text-emerald-700 hover:shadow-md">В избранное</button>
+            </form>
+        @endauth
+        <a href="{{ route('tests.multiple-choice', ['collection_id' => $collection->id]) }}" class="rounded bg-emerald-600 px-4 py-3 font-bold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-emerald-700 hover:shadow-md">Тренировать</a>
+    </div>
+</div>
+
+<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    @foreach($collection->words as $word)
+        <article class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-emerald-300 hover:shadow-md">
+            <h2 class="text-xl font-black">{{ $word->english }}</h2>
+            <p class="text-slate-600">{{ $word->transcription }} · {{ $word->part_of_speech }}</p>
+            <p class="mt-2 font-bold">{{ $word->russian }}</p>
+            @auth
+                <form method="POST" action="{{ route('words.add', $word->id) }}" class="mt-4">
+                    @csrf
+                    <button class="rounded border border-slate-300 bg-white px-3 py-2 text-sm font-bold shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-300 hover:text-emerald-700 hover:shadow-md">В личный словарь</button>
+                </form>
+            @endauth
+        </article>
+    @endforeach
 </div>
 @endsection

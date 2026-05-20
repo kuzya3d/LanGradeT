@@ -2,92 +2,148 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TestResult;
 use App\Models\Word;
+use App\Support\RecordsPractice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class TestController extends Controller
 {
-    public function index()
+    use RecordsPractice;
+
+    public function index(Request $request)
     {
-        return view('tests.index');
+        $includePhrases = $this->rememberIncludePhrases($request);
+
+        return view('tests.index', compact('includePhrases'));
     }
 
-    // Тест "Сборка слова"
-    public function compileWord()
+    public function compileWord(Request $request)
     {
-        $words = Word::inRandomOrder()->limit(1)->get()->map(function ($word) {
-            return [
-                'id' => $word->id,
-                'english' => $word->english,
-                'russian' => $word->russian,
-            ];
-        });
+        $words = $this->wordsForLegacy($request)->take(8)->map(fn (Word $word) => [
+            'id' => $word->id,
+            'english' => $word->english,
+            'russian' => $word->russian,
+            'transcription' => $word->transcription,
+            'part_of_speech' => $word->part_of_speech,
+        ])->values();
 
         return view('tests.compile-word', compact('words'));
     }
 
-    // Обработчик: Сборка слова — сохранение результата
     public function submitCompileWord(Request $request)
     {
-        $correctCount = (int) $request->input('correct', 0);
-        $total = (int) $request->input('total', 0);
+        $answers = $request->input('answers', []);
+        $correct = $request->input('correct_words', []);
+        $translations = $request->input('translations', []);
+        $rows = [];
 
-        $score = $total > 0 ? round(($correctCount / $total) * 100) : 0;
+        foreach ($correct as $index => $expected) {
+            $rows[] = [
+                'question' => $translations[$index] ?? 'Соберите слово',
+                'user_answer' => $answers[$index] ?? '',
+                'correct_answer' => $expected,
+                'is_phrase' => (bool) ($request->input("is_phrase.{$index}") ?? false),
+                'is_correct' => $this->answerMatches($answers[$index] ?? '', $expected),
+            ];
+        }
 
-        TestResult::create([
-            'user_id' => Auth::id(),
-            'type' => 'compile',
-            'score' => $score,
-        ]);
+        [$attempt, $earned] = $this->recordPracticeAttempt('compile-word', 'Сборка слова', 'compile', $rows, 14, $this->includePhrases($request) ? 2 : 0);
 
-        return redirect('tests')->with('success', 'Результат теста сохранён!');
+        return view('tests.modern_result', compact('attempt', 'earned'));
     }
 
-    // Тест "Перевод" (ввод перевода)
-    public function translation()
+    public function translation(Request $request)
     {
-        $words = Word::inRandomOrder()->limit(1)->get();
+        $words = $this->wordsForLegacy($request)->take(8);
         return view('tests.translation', compact('words'));
     }
 
     public function submitTranslation(Request $request)
     {
         $answers = $request->input('answers', []);
-        $wordIds = array_keys($answers);
-        $words = Word::whereIn('id', $wordIds)->get();
-
-        $correctCount = 0;
-        $total = count($answers);
+        $words = $this->visibleWordQuery()->whereIn('id', array_keys($answers))->get();
+        $rows = [];
 
         foreach ($words as $word) {
-            $userAnswer = trim($answers[$word->id] ?? '');
-            if (mb_strtolower($userAnswer) === mb_strtolower($word->russian)) {
-                $correctCount++;
+            $rows[] = [
+                'word_id' => $word->id,
+                'question' => $word->english,
+                'user_answer' => $answers[$word->id] ?? '',
+                'correct_answer' => $word->russian,
+                'is_phrase' => $word->part_of_speech === 'phrase',
+                'is_correct' => $this->answerMatches($answers[$word->id] ?? '', $word->russian),
+            ];
+        }
+
+        [$attempt, $earned] = $this->recordPracticeAttempt('translation-input', 'Ввод перевода', 'input', $rows, 16, $this->includePhrases($request) ? 2 : 0);
+
+        return view('tests.modern_result', compact('attempt', 'earned'));
+    }
+
+    public function flashcards(Request $request)
+    {
+        $words = $this->wordsForLegacy($request)->take(15);
+
+        return view('tests.flashcards', compact('words'));
+    }
+
+    private function wordsForLegacy(Request $request)
+    {
+        $includePhrases = $this->includePhrases($request);
+
+        if ($request->string('source')->toString() === 'dictionary' && auth()->check()) {
+            $words = auth()->user()->words()->inRandomOrder()->get();
+            if (! $includePhrases) {
+                $words = $words->where('part_of_speech', '!=', 'phrase')->values();
+            }
+            if ($words->count() > 0) {
+                return $words;
             }
         }
 
-        $score = $total > 0 ? round(($correctCount / $total) * 100) : 0;
+        if ($request->filled('collection_id')) {
+            $collection = \App\Models\Collection::with('words')->find($request->integer('collection_id'));
+            if ($collection && $collection->words->count() > 0) {
+                $words = $collection->words;
+                if (! $includePhrases) {
+                    $words = $words->where('part_of_speech', '!=', 'phrase');
+                }
 
-        TestResult::create([
-            'user_id' => Auth::id(),
-            'type' => 'input',
-            'score' => $score,
-        ]);
+                if ($words->count() > 0) {
+                    return $words->shuffle()->values();
+                }
+            }
+        }
 
-        return view('tests.translation_result', [
-            'score' => $correctCount,
-            'total' => $total,
-            'words' => $words,
-            'answers' => $answers,
-        ]);
+        $query = $this->visibleWordQuery()->inRandomOrder();
+        if (! $includePhrases) {
+            $query->where('part_of_speech', '!=', 'phrase');
+        }
+
+        return $query->get();
     }
 
-    // Тест "Флеш-карточки"
-    public function flashcards()
+    private function visibleWordQuery()
     {
-        $words = Word::whereNotNull('image')->inRandomOrder()->take(15)->get();
-        return view('tests.flashcards', compact('words'));
+        return Word::visibleTo(Auth::user());
+    }
+
+    private function rememberIncludePhrases(Request $request): bool
+    {
+        if ($request->has('include_phrases')) {
+            session(['tests.include_phrases' => $request->boolean('include_phrases')]);
+        }
+
+        return (bool) session('tests.include_phrases', false);
+    }
+
+    private function includePhrases(Request $request): bool
+    {
+        if ($request->has('include_phrases')) {
+            return $request->boolean('include_phrases');
+        }
+
+        return (bool) session('tests.include_phrases', false);
     }
 }

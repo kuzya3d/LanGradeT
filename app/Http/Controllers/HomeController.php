@@ -8,7 +8,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $collections = Collection::limit(3)->get(); // Например, берем 6 подборок
+        $collections = Collection::withCount('words')->inRandomOrder()->limit(9)->get();
 
         return view('home', compact('collections'));
     }

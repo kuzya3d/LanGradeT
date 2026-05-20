@@ -9,10 +9,15 @@ class Collection extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'description', 'image'];
+    protected $fillable = ['title', 'description'];
 
     public function words()
     {
         return $this->belongsToMany(Word::class, 'collection_word')->withTimestamps();
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class)->withTimestamps();
     }
 }

@@ -1,0 +1,90 @@
+<mxfile host="app.diagrams.net" modified="2026-05-20T00:00:00.000Z" agent="Codex" version="24.7.17" type="device">
+  <diagram id="langrade-usecase" name="LanGrade Use Case">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="system" value="Веб-приложение-тренажер для изучения английского языка LanGrade" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#333333;fontStyle=1;fontSize=14;verticalAlign=top;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="170" y="50" width="1130" height="850" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="guest" value="Гость" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="40" y="560" width="50" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="user" value="Пользователь" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="40" y="170" width="60" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="system_actor" value="Система" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="1430" y="330" width="60" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="gigachat_actor" value="GigaChat API" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="1430" y="620" width="70" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="uc_home" value="Просмотр главной страницы" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=13;" vertex="1" parent="1"><mxGeometry x="230" y="590" width="190" height="60" as="geometry"/></mxCell>
+        <mxCell id="uc_login" value="Вход в систему" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=13;" vertex="1" parent="1"><mxGeometry x="245" y="720" width="160" height="60" as="geometry"/></mxCell>
+        <mxCell id="uc_register" value="Регистрация" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=13;" vertex="1" parent="1"><mxGeometry x="440" y="720" width="150" height="60" as="geometry"/></mxCell>
+        <mxCell id="uc_initial" value="Прохождение начального теста" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=13;" vertex="1" parent="1"><mxGeometry x="435" y="590" width="210" height="65" as="geometry"/></mxCell>
+        <mxCell id="uc_public_collections" value="Просмотр подборок слов" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=13;" vertex="1" parent="1"><mxGeometry x="660" y="590" width="190" height="60" as="geometry"/></mxCell>
+        <mxCell id="uc_lessons" value="Просмотр уроков" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=13;" vertex="1" parent="1"><mxGeometry x="875" y="590" width="160" height="60" as="geometry"/></mxCell>
+        <mxCell id="uc_leaderboard" value="Просмотр рейтинга" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=13;" vertex="1" parent="1"><mxGeometry x="1055" y="590" width="170" height="60" as="geometry"/></mxCell>
+
+        <mxCell id="uc_profile" value="Просмотр и настройка профиля" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=13;" vertex="1" parent="1"><mxGeometry x="230" y="115" width="210" height="65" as="geometry"/></mxCell>
+        <mxCell id="uc_dictionary" value="Ведение личного словаря" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=13;" vertex="1" parent="1"><mxGeometry x="230" y="230" width="205" height="65" as="geometry"/></mxCell>
+        <mxCell id="uc_add_word" value="Добавление слова" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=13;" vertex="1" parent="1"><mxGeometry x="480" y="195" width="165" height="55" as="geometry"/></mxCell>
+        <mxCell id="uc_delete_word" value="Удаление слова" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=13;" vertex="1" parent="1"><mxGeometry x="480" y="270" width="165" height="55" as="geometry"/></mxCell>
+        <mxCell id="uc_tests" value="Прохождение тренировок" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=13;" vertex="1" parent="1"><mxGeometry x="230" y="355" width="200" height="65" as="geometry"/></mxCell>
+        <mxCell id="uc_translation" value="Ввод перевода" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=13;" vertex="1" parent="1"><mxGeometry x="480" y="340" width="145" height="55" as="geometry"/></mxCell>
+        <mxCell id="uc_compile" value="Сборка слова" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=13;" vertex="1" parent="1"><mxGeometry x="645" y="340" width="145" height="55" as="geometry"/></mxCell>
+        <mxCell id="uc_flashcards" value="Флеш-карточки" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=13;" vertex="1" parent="1"><mxGeometry x="810" y="340" width="145" height="55" as="geometry"/></mxCell>
+        <mxCell id="uc_modern_tests" value="Интерактивные режимы&lt;br&gt;multiple-choice, gap-fill,&lt;br&gt;sentence-builder, phonetics,&lt;br&gt;word-sprint" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=12;" vertex="1" parent="1"><mxGeometry x="970" y="320" width="240" height="95" as="geometry"/></mxCell>
+        <mxCell id="uc_results" value="Подсчет результата и XP" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=13;" vertex="1" parent="1"><mxGeometry x="650" y="455" width="195" height="60" as="geometry"/></mxCell>
+        <mxCell id="uc_achievements" value="Начисление достижений" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=13;" vertex="1" parent="1"><mxGeometry x="880" y="455" width="200" height="60" as="geometry"/></mxCell>
+        <mxCell id="uc_favorites" value="Добавление уроков и подборок&lt;br&gt;в избранное" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=13;" vertex="1" parent="1"><mxGeometry x="230" y="470" width="230" height="70" as="geometry"/></mxCell>
+        <mxCell id="uc_community" value="Общение с друзьями" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=13;" vertex="1" parent="1"><mxGeometry x="1120" y="140" width="170" height="60" as="geometry"/></mxCell>
+        <mxCell id="uc_friends" value="Управление друзьями" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=13;" vertex="1" parent="1"><mxGeometry x="905" y="140" width="175" height="60" as="geometry"/></mxCell>
+        <mxCell id="uc_ai" value="Обращение к AI-наставнику" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=13;" vertex="1" parent="1"><mxGeometry x="905" y="230" width="205" height="65" as="geometry"/></mxCell>
+        <mxCell id="uc_ai_answer" value="Формирование ответа AI" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=13;" vertex="1" parent="1"><mxGeometry x="1140" y="245" width="185" height="60" as="geometry"/></mxCell>
+        <mxCell id="uc_save" value="Сохранение данных в БД" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=13;" vertex="1" parent="1"><mxGeometry x="1140" y="455" width="190" height="60" as="geometry"/></mxCell>
+        <mxCell id="uc_logout" value="Выход из системы" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333;fontSize=13;" vertex="1" parent="1"><mxGeometry x="470" y="115" width="165" height="55" as="geometry"/></mxCell>
+
+        <mxCell id="a1" style="endArrow=none;html=1;strokeColor=#333333;" edge="1" parent="1" source="guest" target="uc_home"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a2" style="endArrow=none;html=1;strokeColor=#333333;" edge="1" parent="1" source="guest" target="uc_login"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a3" style="endArrow=none;html=1;strokeColor=#333333;" edge="1" parent="1" source="guest" target="uc_register"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a4" style="endArrow=none;html=1;strokeColor=#333333;" edge="1" parent="1" source="guest" target="uc_initial"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a5" style="endArrow=none;html=1;strokeColor=#333333;" edge="1" parent="1" source="guest" target="uc_public_collections"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a6" style="endArrow=none;html=1;strokeColor=#333333;" edge="1" parent="1" source="guest" target="uc_lessons"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a7" style="endArrow=none;html=1;strokeColor=#333333;" edge="1" parent="1" source="guest" target="uc_leaderboard"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <mxCell id="a8" style="endArrow=none;html=1;strokeColor=#333333;" edge="1" parent="1" source="user" target="uc_profile"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a9" style="endArrow=none;html=1;strokeColor=#333333;" edge="1" parent="1" source="user" target="uc_dictionary"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a10" style="endArrow=none;html=1;strokeColor=#333333;" edge="1" parent="1" source="user" target="uc_tests"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a11" style="endArrow=none;html=1;strokeColor=#333333;" edge="1" parent="1" source="user" target="uc_favorites"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a12" style="endArrow=none;html=1;strokeColor=#333333;" edge="1" parent="1" source="user" target="uc_friends"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a13" style="endArrow=none;html=1;strokeColor=#333333;" edge="1" parent="1" source="user" target="uc_community"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a14" style="endArrow=none;html=1;strokeColor=#333333;" edge="1" parent="1" source="user" target="uc_ai"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a15" style="endArrow=none;html=1;strokeColor=#333333;" edge="1" parent="1" source="user" target="uc_logout"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <mxCell id="i1" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="endArrow=open;html=1;dashed=1;strokeColor=#666666;fontSize=11;" edge="1" parent="1" source="uc_dictionary" target="uc_add_word"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="i2" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="endArrow=open;html=1;dashed=1;strokeColor=#666666;fontSize=11;" edge="1" parent="1" source="uc_dictionary" target="uc_delete_word"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="i3" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="endArrow=open;html=1;dashed=1;strokeColor=#666666;fontSize=11;" edge="1" parent="1" source="uc_tests" target="uc_translation"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="i4" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="endArrow=open;html=1;dashed=1;strokeColor=#666666;fontSize=11;" edge="1" parent="1" source="uc_tests" target="uc_compile"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="i5" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="endArrow=open;html=1;dashed=1;strokeColor=#666666;fontSize=11;" edge="1" parent="1" source="uc_tests" target="uc_flashcards"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="i6" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="endArrow=open;html=1;dashed=1;strokeColor=#666666;fontSize=11;" edge="1" parent="1" source="uc_tests" target="uc_modern_tests"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="i7" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="endArrow=open;html=1;dashed=1;strokeColor=#666666;fontSize=11;" edge="1" parent="1" source="uc_translation" target="uc_results"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="i8" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="endArrow=open;html=1;dashed=1;strokeColor=#666666;fontSize=11;" edge="1" parent="1" source="uc_compile" target="uc_results"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="i9" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="endArrow=open;html=1;dashed=1;strokeColor=#666666;fontSize=11;" edge="1" parent="1" source="uc_modern_tests" target="uc_results"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="i10" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="endArrow=open;html=1;dashed=1;strokeColor=#666666;fontSize=11;" edge="1" parent="1" source="uc_results" target="uc_achievements"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="i11" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="endArrow=open;html=1;dashed=1;strokeColor=#666666;fontSize=11;" edge="1" parent="1" source="uc_results" target="uc_save"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="i12" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="endArrow=open;html=1;dashed=1;strokeColor=#666666;fontSize=11;" edge="1" parent="1" source="uc_register" target="uc_save"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="i13" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="endArrow=open;html=1;dashed=1;strokeColor=#666666;fontSize=11;" edge="1" parent="1" source="uc_ai" target="uc_ai_answer"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="i14" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="endArrow=open;html=1;dashed=1;strokeColor=#666666;fontSize=11;" edge="1" parent="1" source="uc_ai_answer" target="uc_save"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <mxCell id="s1" style="endArrow=none;html=1;strokeColor=#333333;" edge="1" parent="1" source="system_actor" target="uc_save"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="s2" style="endArrow=none;html=1;strokeColor=#333333;" edge="1" parent="1" source="system_actor" target="uc_results"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="s3" style="endArrow=none;html=1;strokeColor=#333333;" edge="1" parent="1" source="system_actor" target="uc_achievements"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="s4" style="endArrow=none;html=1;strokeColor=#333333;" edge="1" parent="1" source="gigachat_actor" target="uc_ai_answer"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

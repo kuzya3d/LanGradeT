@@ -9,18 +9,23 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-public function up()
-{
-    Schema::create('users', function (Blueprint $table) {
-        $table->id();
-        $table->string('name');
-        $table->string('email')->unique();
-        $table->timestamp('email_verified_at')->nullable();
-        $table->string('password');
-        $table->rememberToken();
-        $table->timestamps();
-    });
-}
+    public function up()
+    {
+        Schema::create('users', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->string('avatar')->nullable();
+            $table->string('english_level', 10)->default('A0');
+            $table->unsignedInteger('xp')->default(0);
+            $table->unsignedInteger('streak_days')->default(0);
+            $table->text('bio')->nullable();
+            $table->rememberToken();
+            $table->timestamps();
+        });
+    }
 
 
     /**
