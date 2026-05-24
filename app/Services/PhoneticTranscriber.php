@@ -12,7 +12,7 @@ class PhoneticTranscriber
             return null;
         }
 
-        $python = env('G2P_PYTHON', 'python');
+        $python = config('services.g2p.python', 'python');
         $script = base_path('scripts/g2p_transcribe.py');
 
         if (! is_file($script)) {

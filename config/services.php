@@ -43,4 +43,8 @@ return [
         'proxy' => env('GIGACHAT_PROXY'),
     ],
 
+    'g2p' => [
+        'python' => env('G2P_PYTHON', 'python'),
+    ],
+
 ];
