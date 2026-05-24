@@ -9,12 +9,44 @@ class RichLessonsSeeder extends Seeder
 {
     public function run(): void
     {
+        $defaults = [
+            'word-order' => ['Порядок слов', 'A1', 'grammar', 4],
+            'articles-a-an-the' => ['Артикли a/an/the', 'A1', 'grammar', 5],
+            'simple-dialogues' => ['Мини-диалоги', 'A1', 'speaking', 6],
+            'to-be' => ['Глагол to be', 'A1', 'grammar', 15],
+            'pronouns' => ['Местоимения', 'A1', 'grammar', 18],
+            'plural-nouns' => ['Множественное число', 'A1', 'grammar', 22],
+            'questions-basic' => ['Базовые вопросы', 'A1', 'grammar', 25],
+            'there-is' => ['There is / There are', 'A1', 'grammar', 28],
+            'can-modal' => ['Can: умение и просьба', 'A1', 'grammar', 30],
+            'past-simple-start' => ['Past Simple: старт', 'A2', 'grammar', 33],
+            'future-going-to' => ['Going to', 'A2', 'grammar', 36],
+            'reading-simple-text' => ['Как читать простой текст', 'A1', 'reading', 40],
+            'speaking-about-yourself' => ['Рассказ о себе', 'A1', 'speaking', 43],
+        ];
+
         $lessons = [
             'phonetics-first-sounds' => [
+                'title' => 'Фонетика: первые звуки',
+                'level' => 'A0',
+                'type' => 'phonetics',
+                'position' => 1,
                 'summary' => 'Фонетика помогает читать слова точнее: в английском буквы и звуки часто не совпадают.',
                 'content' => '<h2>Буква и звук</h2><p>В английском языке одна и та же буква может читаться по-разному: a в словах cat [kæt], name [neɪm], father [ˈfɑːðə]. Поэтому важно смотреть не только на написание, но и на транскрипцию.</p><h2>Базовые звуки</h2><table><tr><th>Звук</th><th>Примеры</th><th>Что важно</th></tr><tr><td>[æ]</td><td>cat, apple, bad</td><td>Короткий открытый звук между русскими “э” и “а”.</td></tr><tr><td>[ɪ]</td><td>sit, big, fish</td><td>Короткий звук; не тянуть как русское “ии”.</td></tr><tr><td>[iː]</td><td>see, tea, green</td><td>Длинный звук; в транскрипции двоеточие показывает долготу.</td></tr><tr><td>[ʊ]</td><td>book, good, look</td><td>Короткий звук, ближе к краткому “у”.</td></tr><tr><td>[θ]</td><td>think, three, thanks</td><td>Язык между зубами; это не [s] и не [t].</td></tr><tr><td>[ð]</td><td>this, mother, they</td><td>Похожее положение языка, но звук звонкий.</td></tr></table><h2>Как читать транскрипцию</h2><ul><li>Квадратные скобки показывают звучание: word [wɜːd].</li><li>Знак ˈ показывает ударение: student [ˈstjuːdənt].</li><li>Двоеточие после символа означает долгий звук: [iː], [uː], [ɑː].</li></ul><h2>Минимальные пары</h2><table><tr><th>Пара</th><th>Разница</th><th>Перевод</th></tr><tr><td>ship / sheep</td><td>[ɪ] и [iː]</td><td>корабль / овца</td></tr><tr><td>full / fool</td><td>[ʊ] и [uː]</td><td>полный / дурак</td></tr><tr><td>bad / bed</td><td>[æ] и [e]</td><td>плохой / кровать</td></tr></table><h2>Частые ошибки</h2><ul><li>Читать английские слова русскими буквами: “зис” вместо this [ðɪs].</li><li>Не различать короткие и длинные гласные: ship и sheep звучат по-разному.</li><li>Игнорировать ударение: в английском оно может сильно менять естественность речи.</li></ul><div class="note">Практика: выберите 5 слов из словаря, выпишите транскрипцию, отметьте ударение и произнесите каждое слово медленно 3 раза.</div>',
             ],
+            'american-british-transcription' => [
+                'title' => 'Американская и британская транскрипция',
+                'level' => 'A1',
+                'type' => 'phonetics',
+                'position' => 2,
+                'summary' => 'Разница между AmE и BrE в произношении и IPA: r-звук, гласные, ударение и то, почему автотранскрипция на сайте ближе к американской.',
+                'content' => '<h2>Главная идея</h2><p>Американский английский (AmE) и британский английский (BrE) используют одну систему IPA, но одни и те же слова могут звучать по-разному. Поэтому у слова может быть несколько правильных транскрипций: американская, британская и иногда региональные варианты.</p><h2>Почему на сайте чаще американский вариант</h2><p>Автоматическая транскрипция новых слов генерируется через g2p-en. Эта библиотека опирается на CMU Pronouncing Dictionary, а CMUdict ориентирован преимущественно на американское произношение. Поэтому сгенерированная транскрипция - это полезная фонетическая подсказка, но не универсальный британский стандарт.</p><div class="note">Если в словаре показана автоматически сгенерированная транскрипция, воспринимайте её как базовый вариант, чаще близкий к American English.</div><h2>R-звук: rhotic и non-rhotic</h2><p>Одно из самых заметных отличий: в большинстве американских вариантов буква r после гласной произносится, а в стандартном британском произношении часто не произносится, если после неё нет гласной.</p><table><tr><th>Слово</th><th>AmE</th><th>BrE</th><th>Что происходит</th></tr><tr><td>car</td><td>[kɑr]</td><td>[kɑː]</td><td>В AmE слышно r, в BrE обычно нет.</td></tr><tr><td>hard</td><td>[hɑrd]</td><td>[hɑːd]</td><td>r окрашивает американский гласный.</td></tr><tr><td>teacher</td><td>[ˈtiːtʃər]</td><td>[ˈtiːtʃə]</td><td>Финальное r в BrE часто исчезает.</td></tr></table><h2>Гласные: не всегда один и тот же звук</h2><p>В разных вариантах английского меняется качество гласных. Особенно часто отличаются слова с a, o и долгими гласными.</p><table><tr><th>Слово</th><th>AmE</th><th>BrE</th><th>Комментарий</th></tr><tr><td>bath</td><td>[bæθ]</td><td>[bɑːθ]</td><td>В BrE часто долгий [ɑː], в AmE чаще [æ].</td></tr><tr><td>dance</td><td>[dæns]</td><td>[dɑːns]</td><td>Та же разница в группе слов bath/dance/answer.</td></tr><tr><td>hot</td><td>[hɑt]</td><td>[hɒt]</td><td>В BrE часто используется [ɒ].</td></tr><tr><td>new</td><td>[nuː]</td><td>[njuː]</td><td>В BrE чаще слышно [j] после n.</td></tr></table><h2>Ударение может отличаться</h2><p>Иногда различается не только звук, но и место ударения. Это важно для понимания и естественности речи.</p><table><tr><th>Слово</th><th>AmE</th><th>BrE</th></tr><tr><td>adult</td><td>[əˈdʌlt]</td><td>[ˈædʌlt] или [əˈdʌlt]</td></tr><tr><td>garage</td><td>[ɡəˈrɑːʒ]</td><td>[ˈɡærɑːʒ] или [ˈɡærɪdʒ]</td></tr><tr><td>advertisement</td><td>[ˌædvərˈtaɪzmənt]</td><td>[ədˈvɜːtɪsmənt]</td></tr></table><h2>Разные слова и написание - это отдельная тема</h2><p>Фонетика не равна орфографии и лексике. Например, color/colour - это разница в написании, elevator/lift - разница в слове, а car [kɑr]/[kɑː] - именно разница произношения и транскрипции.</p><h2>Какой вариант учить</h2><ul><li>Для старта выберите один основной вариант, чтобы не смешивать произношение хаотично.</li><li>Если смотрите много американских материалов, логично держаться AmE.</li><li>Если готовитесь к британскому экзамену или учитесь по британским курсам, полезно сверять BrE-варианты.</li><li>Понимать нужно оба варианта: в реальной речи вы встретите и American English, и British English.</li></ul><h2>Как читать транскрипции в словарях</h2><p>Многие словари показывают две строки: UK и US. UK - британское произношение, US - американское. Если есть только одна транскрипция, проверьте, какой стандарт использует источник.</p><div class="note">Практика: сравните в онлайн-словаре UK/US произношение слов water, better, car, bath, schedule. Выпишите, где меняется r, где гласный, а где ударение.</div>',
+            ],
             'present-simple' => [
+                'title' => 'Present Simple',
+                'level' => 'A1',
+                'type' => 'grammar',
+                'position' => 3,
                 'summary' => 'Present Simple описывает привычки, факты, расписания и регулярные действия.',
                 'content' => '<h2>Когда использовать</h2><ul><li>Привычки и режим: I drink tea every morning.</li><li>Постоянные факты: Water boils at 100 degrees.</li><li>Расписание: The train leaves at seven.</li><li>Состояния и мнения: I like music. She knows the answer.</li></ul><h2>Формы</h2><table><tr><th>Кто</th><th>Утверждение</th><th>Отрицание</th><th>Вопрос</th></tr><tr><td>I / you / we / they</td><td>I work.</td><td>I do not work.</td><td>Do you work?</td></tr><tr><td>he / she / it</td><td>She works.</td><td>She does not work.</td><td>Does she work?</td></tr></table><h2>Окончание -s у he/she/it</h2><table><tr><th>Правило</th><th>Пример</th></tr><tr><td>Обычно добавляем -s</td><td>read - reads, play - plays</td></tr><tr><td>После -s, -sh, -ch, -x, -o добавляем -es</td><td>watch - watches, go - goes</td></tr><tr><td>Согласная + y: y меняется на -ies</td><td>study - studies, try - tries</td></tr><tr><td>Гласная + y: просто -s</td><td>play - plays, enjoy - enjoys</td></tr></table><div class="note">В вопросе и отрицании окончание -s переходит в does: Does she study? She does not study. Не пишем Does she studies?</div><h2>Маркеры времени</h2><p>always, usually, often, sometimes, never, every day, every week, on Mondays, in the morning.</p><h2>Примеры</h2><table><tr><th>Английский</th><th>Русский</th><th>Комментарий</th></tr><tr><td>We learn English at school.</td><td>Мы учим английский в школе.</td><td>Регулярное действие.</td></tr><tr><td>He never eats fish.</td><td>Он никогда не ест рыбу.</td><td>He + eats.</td></tr><tr><td>Does your sister work?</td><td>Твоя сестра работает?</td><td>Вопрос через does.</td></tr></table><h2>Частые ошибки</h2><ul><li>Забывать -s: She work вместо She works.</li><li>Ставить -s дважды: Does she works вместо Does she work.</li><li>Использовать Present Simple для действия прямо сейчас: I read now лучше заменить на I am reading now.</li></ul><h2>Мини-практика</h2><p>Напишите 4 предложения о себе: что вы обычно делаете, чего никогда не делаете, что делает ваш друг и один вопрос с Do/Does.</p>',
             ],
@@ -73,7 +105,16 @@ class RichLessonsSeeder extends Seeder
         ];
 
         foreach ($lessons as $slug => $data) {
-            Lesson::where('slug', $slug)->update($data);
+            if (isset($defaults[$slug])) {
+                [$title, $level, $type, $position] = $defaults[$slug];
+
+                $data += compact('title', 'level', 'type', 'position');
+            }
+
+            Lesson::updateOrCreate(
+                ['slug' => $slug],
+                $data
+            );
         }
     }
 }
