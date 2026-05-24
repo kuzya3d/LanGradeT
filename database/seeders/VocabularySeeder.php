@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Collection;
 use App\Models\Word;
+use App\Support\PartOfSpeechResolver;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -12,6 +13,7 @@ class VocabularySeeder extends Seeder
     public function run(): void
     {
         $collections = require database_path('seeders/data/vocabulary.php');
+        $partOfSpeechResolver = app(PartOfSpeechResolver::class);
 
         DB::table('words')->update([
             'example_en' => null,
@@ -33,7 +35,7 @@ class VocabularySeeder extends Seeder
                     'english' => $english,
                     'russian' => $this->normalizeTranslations($english, $russian),
                     'transcription' => $transcription,
-                    'part_of_speech' => $partOfSpeech,
+                    'part_of_speech' => $partOfSpeechResolver->resolve($english, $russian, $partOfSpeech),
                     'difficulty' => $difficulty,
                     'example_en' => null,
                     'example_ru' => null,

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Word;
 use App\Services\PhoneticTranscriber;
+use App\Support\PartOfSpeechResolver;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,7 +18,7 @@ class UserDictionaryController extends Controller
         return view('dictionary.index', compact('userWords'));
     }
 
-    public function store(Request $request, PhoneticTranscriber $transcriber)
+    public function store(Request $request, PhoneticTranscriber $transcriber, PartOfSpeechResolver $partOfSpeechResolver)
     {
         $request->validate([
             'english' => 'required|string|max:255',
@@ -40,7 +41,7 @@ class UserDictionaryController extends Controller
                 $word->forceFill([
                     'russian' => $russian,
                     'transcription' => $word->transcription ?: $transcription,
-                    'part_of_speech' => str_contains($english, ' ') ? 'phrase' : ($word->part_of_speech ?: 'noun'),
+                    'part_of_speech' => $partOfSpeechResolver->resolve($english, $russian, $word->part_of_speech),
                 ])->save();
             }
         } else {
@@ -49,7 +50,7 @@ class UserDictionaryController extends Controller
                 'english' => $english,
                 'russian' => $russian,
                 'transcription' => $transcription,
-                'part_of_speech' => str_contains($english, ' ') ? 'phrase' : 'noun',
+                'part_of_speech' => $partOfSpeechResolver->resolve($english, $russian),
             ]);
         }
 
