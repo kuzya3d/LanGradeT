@@ -14,6 +14,7 @@
 
     <form action="{{ route('tests.translation.submit') }}" method="POST" @keydown.enter.prevent>
         @csrf
+        <input type="hidden" name="submission_token" value="{{ $submissionToken }}">
         <input type="hidden" name="include_phrases" value="{{ request()->has('include_phrases') ? (request()->boolean('include_phrases') ? 1 : 0) : (session('tests.include_phrases', false) ? 1 : 0) }}">
         @foreach($words as $index => $word)
             <section x-show="step === {{ $index }}" x-transition class="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">

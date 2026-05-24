@@ -20,27 +20,54 @@ class ProfileController extends Controller
 
         $userWords = $user->words()->get();
         $testResults = $user->testResults;
-        $attempts = $user->attempts()->with('type')->latest()->take(8)->get();
+        $allAttempts = $user->attempts()->with('type')->latest()->get();
+        $attempts = $allAttempts->take(8);
         $achievements = $user->achievements()->get();
         $achievementsTotal = Achievement::count();
         $passedPercent = $testResults->count() > 0 ? round($testResults->avg('score'), 2) : 0;
 
-        $translationResultsCount = TestResult::where('user_id', $user->id)->where('type', 'input')->count();
-        $translationAvgScore = TestResult::where('user_id', $user->id)->where('type', 'input')->avg('score');
-        $translationAvgScore = $translationAvgScore ? round($translationAvgScore, 2) : 0;
-
-        $compileResultsCount = TestResult::where('user_id', $user->id)->where('type', 'compile')->count();
-        $compileAvgScore = TestResult::where('user_id', $user->id)->where('type', 'compile')->avg('score');
-        $compileAvgScore = $compileAvgScore ? round($compileAvgScore, 2) : 0;
+        $totalAttempts = $allAttempts->count();
+        $averageAttemptScore = $totalAttempts > 0 ? round($allAttempts->avg('score'), 2) : 0;
+        $bestAttemptScore = $totalAttempts > 0 ? (int) $allAttempts->max('score') : 0;
+        $totalAnswered = (int) $allAttempts->sum('total_questions');
+        $totalCorrect = (int) $allAttempts->sum('correct_answers');
+        $accuracyPercent = $totalAnswered > 0 ? round(($totalCorrect / $totalAnswered) * 100, 2) : 0;
+        $totalXpDelta = (int) $allAttempts->sum(fn ($attempt) => $attempt->payload['xp_delta'] ?? $attempt->xp_earned);
+        $bestMode = $allAttempts
+            ->groupBy(fn ($attempt) => $attempt->type->title ?? 'Тест')
+            ->map(fn ($items, $title) => [
+                'title' => $title,
+                'average' => round($items->avg('score'), 2),
+                'count' => $items->count(),
+            ])
+            ->sortByDesc('average')
+            ->first();
+        $testModeStats = $allAttempts
+            ->groupBy(fn ($attempt) => $attempt->type->title ?? 'Тест')
+            ->map(fn ($items, $title) => [
+                'title' => $title,
+                'count' => $items->count(),
+                'average' => round($items->avg('score'), 2),
+                'best' => (int) $items->max('score'),
+                'xp' => (int) $items->sum(fn ($attempt) => $attempt->payload['xp_delta'] ?? $attempt->xp_earned),
+                'last_at' => optional($items->first()->created_at)->format('d.m.Y H:i'),
+            ])
+            ->sortBy('title')
+            ->values();
 
         return view('profile.index', compact(
             'user',
             'userWords',
             'passedPercent',
-            'translationResultsCount',
-            'translationAvgScore',
-            'compileResultsCount',
-            'compileAvgScore',
+            'totalAttempts',
+            'averageAttemptScore',
+            'bestAttemptScore',
+            'totalAnswered',
+            'totalCorrect',
+            'accuracyPercent',
+            'totalXpDelta',
+            'bestMode',
+            'testModeStats',
             'attempts',
             'achievements',
             'achievementsTotal'

@@ -37,6 +37,7 @@
 
     <form x-ref="form" method="POST" action="{{ route('tests.submit-compile-word') }}" class="hidden" @keydown.enter.prevent>
         @csrf
+        <input type="hidden" name="submission_token" value="{{ $submissionToken }}">
         <template x-for="(row, i) in results" :key="i">
             <div>
                 <input type="hidden" :name="`answers[${i}]`" :value="row.answer">

@@ -32,6 +32,7 @@
     @else
         <form x-ref="form" method="POST" action="{{ route('tests.modern-submit', $mode) }}" @keydown.enter.prevent>
             @csrf
+            <input type="hidden" name="submission_token" value="{{ $submissionToken }}">
             <input type="hidden" name="variant" x-model="activeVariant">
             <input type="hidden" name="source" value="{{ $source ?? request('source') }}">
             <input type="hidden" name="include_phrases" value="{{ in_array($mode, ['gap-fill', 'sentence-builder'], true) ? 0 : (($includePhrases ?? (request()->has('include_phrases') ? request()->boolean('include_phrases') : session('tests.include_phrases', false))) ? 1 : 0) }}">

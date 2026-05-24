@@ -40,6 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/tests/phonetics', [PracticeController::class, 'phonetics'])->name('tests.phonetics');
     Route::get('/tests/word-sprint', [PracticeController::class, 'wordSprint'])->name('tests.word-sprint');
     Route::post('/tests/{mode}/submit', [PracticeController::class, 'submit'])->name('tests.modern-submit');
+    Route::get('/tests/attempts/{attempt}', [PracticeController::class, 'result'])->name('tests.attempt-result');
 
     Route::get('/community', [CommunityController::class, 'index'])->name('community.index');
     Route::get('/community/updates', [CommunityController::class, 'updates'])->name('community.updates');

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Collection;
+use App\Models\Achievement;
 use App\Models\Sentence;
+use App\Models\TestAttempt;
 use App\Models\Word;
 use App\Support\RecordsPractice;
 use Illuminate\Http\Request;
@@ -44,6 +46,7 @@ class PracticeController extends Controller
             'questions' => $questions,
             'source' => $request->string('source')->toString(),
             'includePhrases' => $includePhrases,
+            'submissionToken' => $this->issuePracticeSubmissionToken(),
         ]);
     }
 
@@ -66,6 +69,7 @@ class PracticeController extends Controller
             'subtitle' => 'Впишите недостающее английское слово в предложении.',
             'mode' => 'gap-fill',
             'questions' => $questions,
+            'submissionToken' => $this->issuePracticeSubmissionToken(),
         ]);
     }
 
@@ -92,6 +96,7 @@ class PracticeController extends Controller
             'mode' => 'sentence-builder',
             'variant' => $variant,
             'questions' => $questions,
+            'submissionToken' => $this->issuePracticeSubmissionToken(),
         ]);
     }
 
@@ -123,6 +128,7 @@ class PracticeController extends Controller
             'mode' => 'phonetics',
             'questions' => $questions,
             'includePhrases' => $includePhrases,
+            'submissionToken' => $this->issuePracticeSubmissionToken(),
         ]);
     }
 
@@ -152,11 +158,16 @@ class PracticeController extends Controller
             'mode' => 'word-sprint',
             'questions' => $questions,
             'includePhrases' => $includePhrases,
+            'submissionToken' => $this->issuePracticeSubmissionToken(),
         ]);
     }
 
     public function submit(Request $request, string $mode)
     {
+        if ($redirect = $this->duplicatePracticeSubmissionRedirect($request)) {
+            return $redirect;
+        }
+
         $answers = $request->input('answers', []);
         $correct = $request->input('correct', []);
         $questions = $request->input('questions', []);
@@ -190,7 +201,22 @@ class PracticeController extends Controller
             $rows,
             $practiceOnly ? 0 : ($mode === 'sentence-builder' ? ($variant === 'typing' ? 24 : 16) : 12),
             in_array($mode, ['gap-fill', 'sentence-builder'], true) ? 0 : ($this->includePhrases($request) ? 2 : 0),
+            $practiceOnly,
         );
+        $this->markPracticeSubmissionUsed($request, $attempt);
+
+        return redirect()
+            ->route('tests.attempt-result', $attempt)
+            ->with('earned_achievement_ids', $earned->pluck('id')->all());
+    }
+
+    public function result(TestAttempt $attempt)
+    {
+        abort_unless($attempt->user_id === Auth::id(), 404);
+
+        $attempt->load(['type', 'answers']);
+        $earned = Achievement::whereIn('id', session('earned_achievement_ids', []))->get();
+        $practiceOnly = ($attempt->payload['practice_only'] ?? false) === true;
 
         return view('tests.modern_result', compact('attempt', 'earned', 'practiceOnly'));
     }

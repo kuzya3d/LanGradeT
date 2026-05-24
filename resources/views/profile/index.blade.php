@@ -58,10 +58,45 @@
         <div class="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
             <h2 class="text-xl font-black">Статистика тестов</h2>
             <div class="mt-4 grid gap-3 md:grid-cols-3">
-                <div class="rounded bg-slate-50 p-4"><b>{{ $translationResultsCount }}</b><p class="text-sm text-slate-600">переводов · {{ $translationAvgScore }}%</p></div>
-                <div class="rounded bg-slate-50 p-4"><b>{{ $compileResultsCount }}</b><p class="text-sm text-slate-600">сборок · {{ $compileAvgScore }}%</p></div>
-                <div class="rounded bg-slate-50 p-4"><b>{{ $attempts->count() }}</b><p class="text-sm text-slate-600">новых попыток</p></div>
+                <div class="rounded bg-slate-50 p-4"><b>{{ $totalAttempts }}</b><p class="text-sm text-slate-600">попыток всего</p></div>
+                <div class="rounded bg-slate-50 p-4"><b>{{ $averageAttemptScore }}%</b><p class="text-sm text-slate-600">средний результат</p></div>
+                <div class="rounded bg-slate-50 p-4"><b>{{ $bestAttemptScore }}%</b><p class="text-sm text-slate-600">лучший результат</p></div>
+                <div class="rounded bg-slate-50 p-4"><b>{{ $accuracyPercent }}%</b><p class="text-sm text-slate-600">точность · {{ $totalCorrect }}/{{ $totalAnswered }}</p></div>
+                <div class="rounded bg-slate-50 p-4"><b>{{ $totalXpDelta }}</b><p class="text-sm text-slate-600">XP за тесты</p></div>
+                <div class="rounded bg-slate-50 p-4">
+                    <b>{{ $bestMode['title'] ?? 'Нет данных' }}</b>
+                    <p class="text-sm text-slate-600">
+                        @if($bestMode)
+                            лучший режим · {{ $bestMode['average'] }}%
+                        @else
+                            пройдите первый тест
+                        @endif
+                    </p>
+                </div>
             </div>
+
+            @if($testModeStats->isNotEmpty())
+                <div class="mt-5 overflow-hidden rounded border border-slate-200">
+                    <div class="grid grid-cols-[1.5fr_0.7fr_0.7fr_0.7fr] bg-slate-100 px-4 py-2 text-xs font-black uppercase text-slate-500 md:grid-cols-[1.8fr_0.7fr_0.7fr_0.7fr_0.9fr]">
+                        <span>Режим</span>
+                        <span>Попытки</span>
+                        <span>Средний</span>
+                        <span>Лучший</span>
+                        <span class="hidden md:block">Последний</span>
+                    </div>
+                    @foreach($testModeStats as $modeStat)
+                        <div class="grid grid-cols-[1.5fr_0.7fr_0.7fr_0.7fr] items-center border-t border-slate-200 px-4 py-3 text-sm md:grid-cols-[1.8fr_0.7fr_0.7fr_0.7fr_0.9fr]">
+                            <b>{{ $modeStat['title'] }}</b>
+                            <span>{{ $modeStat['count'] }}</span>
+                            <span>{{ $modeStat['average'] }}%</span>
+                            <span>{{ $modeStat['best'] }}%</span>
+                            <span class="hidden text-slate-500 md:block">{{ $modeStat['last_at'] }}</span>
+                        </div>
+                    @endforeach
+                </div>
+            @else
+                <p class="mt-4 text-slate-500">Статистика появится после первой тренировки.</p>
+            @endif
         </div>
 
         <div class="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
@@ -85,8 +120,11 @@
             <h2 class="text-xl font-black">Последние тренировки</h2>
             <div class="mt-4 space-y-2">
                 @forelse($attempts as $attempt)
-                    <div class="flex items-center justify-between rounded bg-slate-50 px-4 py-3">
-                        <span>{{ $attempt->type->title ?? 'Тест' }}</span>
+                    <div class="flex flex-wrap items-center justify-between gap-3 rounded bg-slate-50 px-4 py-3">
+                        <div>
+                            <span class="font-bold">{{ $attempt->type->title ?? 'Тест' }}</span>
+                            <p class="text-xs text-slate-500">{{ $attempt->correct_answers }}/{{ $attempt->total_questions }} · {{ $attempt->created_at->format('d.m.Y H:i') }}</p>
+                        </div>
                         <b>{{ $attempt->score }}%</b>
                     </div>
                 @empty

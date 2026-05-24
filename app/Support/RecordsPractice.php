@@ -7,11 +7,67 @@ use App\Models\TestAttempt;
 use App\Models\TestResult;
 use App\Models\TestType;
 use App\Services\AchievementService;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 trait RecordsPractice
 {
-    protected function recordPracticeAttempt(string $mode, string $title, string $legacyType, array $rows, int $xpReward = 12, int $phraseBonus = 0): array
+    protected function issuePracticeSubmissionToken(): string
+    {
+        $token = (string) Str::uuid();
+        $submissions = session('practice_submissions', []);
+
+        $submissions = collect($submissions)
+            ->filter(fn (array $submission) => ($submission['created_at'] ?? 0) > now()->subHours(6)->timestamp)
+            ->all();
+
+        $submissions[$token] = [
+            'attempt_id' => null,
+            'created_at' => now()->timestamp,
+        ];
+
+        session(['practice_submissions' => $submissions]);
+
+        return $token;
+    }
+
+    protected function duplicatePracticeSubmissionRedirect(Request $request): ?RedirectResponse
+    {
+        $token = (string) $request->input('submission_token', '');
+        $submissions = session('practice_submissions', []);
+        $submission = $submissions[$token] ?? null;
+
+        if ($token === '' || $submission === null) {
+            return redirect()
+                ->route('tests.index')
+                ->with('success', 'Эта форма теста уже устарела. Запустите тренировку заново.');
+        }
+
+        if (! empty($submission['attempt_id'])) {
+            return redirect()->route('tests.attempt-result', $submission['attempt_id']);
+        }
+
+        return null;
+    }
+
+    protected function markPracticeSubmissionUsed(Request $request, TestAttempt $attempt): void
+    {
+        $token = (string) $request->input('submission_token', '');
+        $submissions = session('practice_submissions', []);
+
+        if ($token === '' || ! isset($submissions[$token])) {
+            return;
+        }
+
+        $submissions[$token]['attempt_id'] = $attempt->id;
+        $submissions[$token]['used_at'] = now()->timestamp;
+
+        session(['practice_submissions' => $submissions]);
+    }
+
+    protected function recordPracticeAttempt(string $mode, string $title, string $legacyType, array $rows, int $xpReward = 12, int $phraseBonus = 0, bool $practiceOnly = false): array
     {
         $total = max(count($rows), 1);
         $correctCount = collect($rows)->where('is_correct', true)->count();
@@ -38,7 +94,11 @@ trait RecordsPractice
             'correct_answers' => $correctCount,
             'total_questions' => $total,
             'xp_earned' => max(0, $xp),
-            'payload' => ['xp_delta' => $xp, 'phrase_bonus' => $correctPhraseCount * $phraseBonus],
+            'payload' => [
+                'xp_delta' => $xp,
+                'phrase_bonus' => $correctPhraseCount * $phraseBonus,
+                'practice_only' => $practiceOnly,
+            ],
         ]);
 
         foreach ($rows as $row) {

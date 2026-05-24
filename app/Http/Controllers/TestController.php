@@ -27,12 +27,17 @@ class TestController extends Controller
             'transcription' => $word->transcription,
             'part_of_speech' => $word->part_of_speech,
         ])->values();
+        $submissionToken = $this->issuePracticeSubmissionToken();
 
-        return view('tests.compile-word', compact('words'));
+        return view('tests.compile-word', compact('words', 'submissionToken'));
     }
 
     public function submitCompileWord(Request $request)
     {
+        if ($redirect = $this->duplicatePracticeSubmissionRedirect($request)) {
+            return $redirect;
+        }
+
         $answers = $request->input('answers', []);
         $correct = $request->input('correct_words', []);
         $translations = $request->input('translations', []);
@@ -49,18 +54,27 @@ class TestController extends Controller
         }
 
         [$attempt, $earned] = $this->recordPracticeAttempt('compile-word', 'Сборка слова', 'compile', $rows, 14, $this->includePhrases($request) ? 2 : 0);
+        $this->markPracticeSubmissionUsed($request, $attempt);
 
-        return view('tests.modern_result', compact('attempt', 'earned'));
+        return redirect()
+            ->route('tests.attempt-result', $attempt)
+            ->with('earned_achievement_ids', $earned->pluck('id')->all());
     }
 
     public function translation(Request $request)
     {
         $words = $this->wordsForLegacy($request)->take(8);
-        return view('tests.translation', compact('words'));
+        $submissionToken = $this->issuePracticeSubmissionToken();
+
+        return view('tests.translation', compact('words', 'submissionToken'));
     }
 
     public function submitTranslation(Request $request)
     {
+        if ($redirect = $this->duplicatePracticeSubmissionRedirect($request)) {
+            return $redirect;
+        }
+
         $answers = $request->input('answers', []);
         $words = $this->visibleWordQuery()->whereIn('id', array_keys($answers))->get();
         $rows = [];
@@ -77,8 +91,11 @@ class TestController extends Controller
         }
 
         [$attempt, $earned] = $this->recordPracticeAttempt('translation-input', 'Ввод перевода', 'input', $rows, 16, $this->includePhrases($request) ? 2 : 0);
+        $this->markPracticeSubmissionUsed($request, $attempt);
 
-        return view('tests.modern_result', compact('attempt', 'earned'));
+        return redirect()
+            ->route('tests.attempt-result', $attempt)
+            ->with('earned_achievement_ids', $earned->pluck('id')->all());
     }
 
     public function flashcards(Request $request)
