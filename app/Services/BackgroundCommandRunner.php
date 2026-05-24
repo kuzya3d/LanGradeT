@@ -6,7 +6,8 @@ class BackgroundCommandRunner
 {
     public function run(string $command): bool
     {
-        $php = PHP_BINARY;
+        $php = config('services.background.php_binary')
+            ?: (PHP_SAPI === 'cli' ? PHP_BINARY : 'php');
         $artisan = base_path('artisan');
 
         if (PHP_OS_FAMILY === 'Windows') {

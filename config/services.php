@@ -47,4 +47,8 @@ return [
         'python' => env('G2P_PYTHON', 'python'),
     ],
 
+    'background' => [
+        'php_binary' => env('BACKGROUND_PHP_BINARY'),
+    ],
+
 ];
