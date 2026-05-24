@@ -107,8 +107,8 @@
             <p>LanGrade · базовый английский от фонетики до первых диалогов</p>
             <p>
                 Обратная связь:
-                <a href="mailto:langradefeed@gmail.com" class="font-semibold text-emerald-700 hover:text-emerald-800">
-                    langradefeedback@gmail.com
+                <a href="mailto:langradefeedback@mail.ru" class="font-semibold text-emerald-700 hover:text-emerald-800">
+                    langradefeedback@mail.ru
                 </a>
             </p>
         </div>
