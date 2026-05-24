@@ -66,7 +66,7 @@ class CommunityController extends Controller
 
     public function reply(Request $request, Conversation $conversation)
     {
-        abort_unless($conversation->users()->where('user_id', Auth::id())->exists(), 403);
+        $this->authorizeConversationParticipant($conversation);
 
         $data = $request->validate(['body' => ['required', 'string', 'max:2000']]);
         Message::create([
@@ -89,7 +89,7 @@ class CommunityController extends Controller
 
     public function destroy(Conversation $conversation)
     {
-        abort_unless($conversation->users()->where('user_id', Auth::id())->exists(), 403);
+        $this->authorizeConversationParticipant($conversation);
         $conversation->delete();
 
         return redirect()->route('community.index')->with('success', 'Диалог удален.');
@@ -113,6 +113,12 @@ class CommunityController extends Controller
 
         return back()->with('success', 'Пользователь удален из друзей.');
     }
+
+    private function authorizeConversationParticipant(Conversation $conversation): void
+    {
+        abort_unless($conversation->users()->where('user_id', Auth::id())->exists(), 403);
+    }
+
     private function conversationPayload(?int $conversationId = null)
     {
         $query = Auth::user()

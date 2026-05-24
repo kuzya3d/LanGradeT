@@ -17,3 +17,7 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+
+# Local project notes, not for GitHub
+/ChitauContext.md
+/README_PROJECT_FULL.md

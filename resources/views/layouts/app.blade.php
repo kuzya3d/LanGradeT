@@ -103,7 +103,15 @@
     </main>
 
     <footer class="border-t border-slate-200 bg-white py-6 text-center text-sm text-slate-500">
-        LanGrade · базовый английский от фонетики до первых диалогов
+        <div class="mx-auto flex max-w-7xl flex-col items-center gap-1 px-4">
+            <p>LanGrade · базовый английский от фонетики до первых диалогов</p>
+            <p>
+                Обратная связь:
+                <a href="mailto:langradefeed@gmail.com" class="font-semibold text-emerald-700 hover:text-emerald-800">
+                    langradefeedback@gmail.com
+                </a>
+            </p>
+        </div>
     </footer>
 </body>
 </html>
